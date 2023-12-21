@@ -82,3 +82,34 @@ html {
     font-display: swap;
   }
   
+  .progress-bar-container {
+    margin-top: 20px;
+    position: relative;
+}
+
+.file-name {
+    margin-bottom: 5px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 20px;
+    background-color: #20525c;
+    border-radius: 5px;
+    position: relative;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    border-radius: 5px;
+    background-color: #17252a;
+    transition: width 0.3s ease;
+}
+
+.progress-bar-percentage {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #66fcf1;
+}
