@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SK0R3X</title>
+    <link rel="shortcut icon" href="/fav.png" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">SK0R3X</a>
+        </div>
+    </nav>
+    <div class="container text-break">
+        <div class="jumbotron last">
+            <h1>File Merger</h1>
+            <input type="file" id="fileInput" multiple><br><br>
+            <label for="fileInput" id="fileInputLabel">Select split files</label><br>
+            <button id="joinButton">Join</button>
+        </div>   
+        <div class="fixed-bottom ftr">
+            <footer style="text-align: center;">&copy; 2023 SK0R3X</footer>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script>
+        document.getElementById('joinButton').addEventListener('click', async () => {
+            const fileInput = document.getElementById('fileInput');
+            
+            if (fileInput.files.length === 0) {
+                alert('Please select split files to join.');
+                return;
+            }
+
+            const fileParts = Array.from(fileInput.files);
+            const originalFileName = fileParts[0].name;
+            const originalFileNameWithoutExtension = originalFileName.split('.').slice(0, -1).join('.');
+            const originalFileExtension = originalFileName.split('.').pop();
+            
+            const joinedFileName = originalFileNameWithoutExtension.replace(/\.part\d+$/, '');
+            
+            const combinedBlob = new Blob(fileParts, { type: fileParts[0].type });
+            const url = URL.createObjectURL(combinedBlob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${joinedFileName}.${originalFileExtension}`;
+            document.body.appendChild(a);
+            a.click();
+            URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+
+            alert('Files successfully joined and downloaded.');
+        });
+
+        document.getElementById('fileInput').addEventListener('change', () => {
+            const fileInput = document.getElementById('fileInput');
+            const fileInputLabel = document.getElementById('fileInputLabel');
+            if (fileInput.files.length > 0) {
+                const fileNames = Array.from(fileInput.files).map(file => file.name).join(', ');
+                fileInputLabel.textContent = fileNames;
+            } else {
+                fileInputLabel.textContent = 'Select split files';
+            }
+        });
+    </script>
+</body>
+</html>
